@@ -1,0 +1,88 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local function loadNophHub()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/REF829/C00lNOPH/refs/heads/main/NOPH%20V1"))()
+end
+
+local function promptKey()
+	local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+	ScreenGui.Name = "KeyPromptGui"
+	ScreenGui.ResetOnSpawn = false
+
+	local Frame = Instance.new("Frame", ScreenGui)
+	Frame.Size = UDim2.new(0, 300, 0, 180)
+	Frame.Position = UDim2.new(0.5, -150, 0.5, -90)
+	Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+	Frame.Active = true
+	Frame.Draggable = true
+	Instance.new("UICorner", Frame)
+
+	local TextLabel = Instance.new("TextLabel", Frame)
+	TextLabel.Size = UDim2.new(1, -20, 0, 50)
+	TextLabel.Position = UDim2.new(0, 10, 0, 10)
+	TextLabel.Text = "Enter Key to use Noph Hub:"
+	TextLabel.TextColor3 = Color3.new(1,1,1)
+	TextLabel.BackgroundTransparency = 1
+	TextLabel.Font = Enum.Font.GothamBold
+	TextLabel.TextSize = 20
+	TextLabel.TextWrapped = true
+
+	local TextBox = Instance.new("TextBox", Frame)
+	TextBox.Size = UDim2.new(1, -20, 0, 40)
+	TextBox.Position = UDim2.new(0, 10, 0, 70)
+	TextBox.PlaceholderText = "Type your key here"
+	TextBox.ClearTextOnFocus = false
+	TextBox.Font = Enum.Font.Gotham
+	TextBox.TextSize = 18
+	TextBox.TextColor3 = Color3.new(1,1,1)
+	TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	Instance.new("UICorner", TextBox)
+
+	local EnterBtn = Instance.new("TextButton", Frame)
+	EnterBtn.Size = UDim2.new(0.45, -5, 0, 30)
+	EnterBtn.Position = UDim2.new(0.05, 0, 1, -40)
+	EnterBtn.Text = "Enter"
+	EnterBtn.Font = Enum.Font.GothamBold
+	EnterBtn.TextSize = 20
+	EnterBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+	EnterBtn.TextColor3 = Color3.new(1,1,1)
+	Instance.new("UICorner", EnterBtn)
+
+	local CopyBtn = Instance.new("TextButton", Frame)
+	CopyBtn.Size = UDim2.new(0.45, -5, 0, 30)
+	CopyBtn.Position = UDim2.new(0.5, 5, 1, -40)
+	CopyBtn.Text = "Copy Key"
+	CopyBtn.Font = Enum.Font.GothamBold
+	CopyBtn.TextSize = 20
+	CopyBtn.BackgroundColor3 = Color3.fromRGB(40, 180, 90)
+	CopyBtn.TextColor3 = Color3.new(1,1,1)
+	Instance.new("UICorner", CopyBtn)
+
+	local function onKeyEntered()
+		local key = TextBox.Text
+		if key == "Free_682" then
+			ScreenGui:Destroy()
+			loadNophHub()
+		else
+			player:Kick("Incorrect key! Access denied.")
+		end
+	end
+
+	EnterBtn.MouseButton1Click:Connect(onKeyEntered)
+	TextBox.FocusLost:Connect(function(enterPressed)
+		if enterPressed then
+			onKeyEntered()
+		end
+	end)
+
+	CopyBtn.MouseButton1Click:Connect(function()
+		setclipboard("Free_682")
+		CopyBtn.Text = "Copied!"
+		task.wait(1)
+		CopyBtn.Text = "Copy Key"
+	end)
+end
+
+promptKey()
