@@ -1,0 +1,135 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "C00lReExecutor"
+gui.ResetOnSpawn = false
+gui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 500, 0, 400)
+frame.Position = UDim2.new(0.5, -250, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = gui
+
+local titleBar = Instance.new("TextLabel")
+titleBar.Text = "C00lReExecutor"
+titleBar.Size = UDim2.new(1, 0, 0, 40)
+titleBar.BackgroundColor3 = Color3.fromRGB(0, 150, 120)
+titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleBar.Font = Enum.Font.SourceSansBold
+titleBar.TextSize = 22
+titleBar.TextXAlignment = Enum.TextXAlignment.Center
+titleBar.Parent = frame
+
+local scriptBox = Instance.new("TextBox")
+scriptBox.PlaceholderText = "Place Script Here!"
+scriptBox.ClearTextOnFocus = false
+scriptBox.TextWrapped = true
+scriptBox.MultiLine = true
+scriptBox.Text = ""
+scriptBox.Font = Enum.Font.Code
+scriptBox.TextSize = 16
+scriptBox.TextColor3 = Color3.fromRGB(0, 255, 150)
+scriptBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+scriptBox.Size = UDim2.new(0.9, 0, 0.5, 0)
+scriptBox.Position = UDim2.new(0.05, 0, 0.15, 0)
+scriptBox.Parent = frame
+scriptBox.Visible = false
+
+local executeBtn = Instance.new("TextButton")
+executeBtn.Text = "Execute"
+executeBtn.Font = Enum.Font.SourceSansBold
+executeBtn.TextSize = 20
+executeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+executeBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 120)
+executeBtn.Size = UDim2.new(0.5, 0, 0, 40)
+executeBtn.Position = UDim2.new(0.25, 0, 0.68, 0)
+executeBtn.Parent = frame
+executeBtn.Visible = false
+
+local log = Instance.new("TextLabel")
+log.Text = "Please verify to unlock executor."
+log.Font = Enum.Font.SourceSans
+log.TextSize = 16
+log.TextColor3 = Color3.fromRGB(255, 255, 255)
+log.BackgroundTransparency = 1
+log.Size = UDim2.new(1, -20, 0, 30)
+log.Position = UDim2.new(0.05, 0, 0.85, 0)
+log.TextXAlignment = Enum.TextXAlignment.Left
+log.Parent = frame
+
+-- Key system UI
+local getKeyBtn = Instance.new("TextButton")
+getKeyBtn.Text = "Get Key"
+getKeyBtn.Font = Enum.Font.SourceSansBold
+getKeyBtn.TextSize = 18
+getKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKeyBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+getKeyBtn.Size = UDim2.new(0.4, 0, 0, 40)
+getKeyBtn.Position = UDim2.new(0.1, 0, 0.68, 0)
+getKeyBtn.Parent = frame
+
+local keyBox = Instance.new("TextBox")
+keyBox.PlaceholderText = "Enter Key Here"
+keyBox.Text = ""
+keyBox.Font = Enum.Font.SourceSans
+keyBox.TextSize = 16
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keyBox.Size = UDim2.new(0.4, 0, 0, 40)
+keyBox.Position = UDim2.new(0.5, 0, 0.68, 0)
+keyBox.Parent = frame
+
+-- Clipboard copy
+getKeyBtn.MouseButton1Click:Connect(function()
+	local link = "https://sites.google.com/view/whagjen/home" -- <- replace with your real link
+	local success = pcall(function()
+		setclipboard(link)
+	end)
+
+	if success then
+		log.Text = "Link copied to clipboard. Open it and get your key."
+	else
+		log.Text = "Couldn't copy. Manually visit: " .. link
+	end
+end)
+
+-- Key check
+local correctKey = "Free_682" -- <- change to your own key
+
+keyBox.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		if keyBox.Text == correctKey then
+			log.Text = "Key correct. Executor unlocked."
+			scriptBox.Visible = true
+			executeBtn.Visible = true
+			getKeyBtn.Visible = false
+			keyBox.Visible = false
+		else
+			log.Text = "Incorrect key. Try again."
+		end
+	end
+end)
+
+-- Execution
+executeBtn.MouseButton1Click:Connect(function()
+	local code = scriptBox.Text
+	if code == nil or code == "" or code == "Place Script Here!" then
+		log.Text = "Paste a script before executing!"
+	else
+		local success, err = pcall(function()
+			loadstring(code)()
+		end)
+
+		if success then
+			log.Text = "Executed successfully."
+		else
+			log.Text = "Error: " .. tostring(err)
+		end
+	end
+end)
