@@ -7,25 +7,53 @@ gui.Name = "C00lReExecutor"
 gui.ResetOnSpawn = false
 gui.Parent = playerGui
 
+-- Main Frame (Transparent, only used for layout/dragging)
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 500, 0, 400)
 frame.Position = UDim2.new(0.5, -250, 0.5, -200)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BackgroundTransparency = 1
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
 frame.Parent = gui
 
-local titleBar = Instance.new("TextLabel")
-titleBar.Text = "C00lReExecutor"
+-- Title Bar
+local titleBar = Instance.new("Frame")
 titleBar.Size = UDim2.new(1, 0, 0, 40)
 titleBar.BackgroundColor3 = Color3.fromRGB(0, 150, 120)
-titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleBar.Font = Enum.Font.SourceSansBold
-titleBar.TextSize = 22
-titleBar.TextXAlignment = Enum.TextXAlignment.Center
 titleBar.Parent = frame
 
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Text = "C00lReExecutor"
+titleLabel.Size = UDim2.new(1, -40, 1, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 22
+titleLabel.TextXAlignment = Enum.TextXAlignment.Center
+titleLabel.Parent = titleBar
+
+-- Minimize Button
+local minimizeBtn = Instance.new("TextButton")
+minimizeBtn.Text = "-"
+minimizeBtn.Font = Enum.Font.SourceSansBold
+minimizeBtn.TextSize = 20
+minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 100)
+minimizeBtn.Size = UDim2.new(0, 40, 1, 0)
+minimizeBtn.Position = UDim2.new(1, -40, 0, 0)
+minimizeBtn.Parent = titleBar
+
+-- Content Frame (holds everything else)
+local content = Instance.new("Frame")
+content.Size = UDim2.new(1, 0, 1, -40)
+content.Position = UDim2.new(0, 0, 0, 40)
+content.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+content.BorderSizePixel = 0
+content.Parent = frame
+
+-- Script Box
 local scriptBox = Instance.new("TextBox")
 scriptBox.PlaceholderText = "Place Script Here!"
 scriptBox.ClearTextOnFocus = false
@@ -37,10 +65,11 @@ scriptBox.TextSize = 16
 scriptBox.TextColor3 = Color3.fromRGB(0, 255, 150)
 scriptBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 scriptBox.Size = UDim2.new(0.9, 0, 0.5, 0)
-scriptBox.Position = UDim2.new(0.05, 0, 0.15, 0)
-scriptBox.Parent = frame
+scriptBox.Position = UDim2.new(0.05, 0, 0.05, 0)
+scriptBox.Parent = content
 scriptBox.Visible = false
 
+-- Execute Button
 local executeBtn = Instance.new("TextButton")
 executeBtn.Text = "Execute"
 executeBtn.Font = Enum.Font.SourceSansBold
@@ -48,10 +77,11 @@ executeBtn.TextSize = 20
 executeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 executeBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 120)
 executeBtn.Size = UDim2.new(0.5, 0, 0, 40)
-executeBtn.Position = UDim2.new(0.25, 0, 0.68, 0)
-executeBtn.Parent = frame
+executeBtn.Position = UDim2.new(0.25, 0, 0.58, 0)
+executeBtn.Parent = content
 executeBtn.Visible = false
 
+-- Log
 local log = Instance.new("TextLabel")
 log.Text = "Please verify to unlock executor."
 log.Font = Enum.Font.SourceSans
@@ -61,7 +91,7 @@ log.BackgroundTransparency = 1
 log.Size = UDim2.new(1, -20, 0, 30)
 log.Position = UDim2.new(0.05, 0, 0.85, 0)
 log.TextXAlignment = Enum.TextXAlignment.Left
-log.Parent = frame
+log.Parent = content
 
 -- Key system UI
 local getKeyBtn = Instance.new("TextButton")
@@ -71,8 +101,8 @@ getKeyBtn.TextSize = 18
 getKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 getKeyBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
 getKeyBtn.Size = UDim2.new(0.4, 0, 0, 40)
-getKeyBtn.Position = UDim2.new(0.1, 0, 0.68, 0)
-getKeyBtn.Parent = frame
+getKeyBtn.Position = UDim2.new(0.1, 0, 0.58, 0)
+getKeyBtn.Parent = content
 
 local keyBox = Instance.new("TextBox")
 keyBox.PlaceholderText = "Enter Key Here"
@@ -82,12 +112,12 @@ keyBox.TextSize = 16
 keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 keyBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 keyBox.Size = UDim2.new(0.4, 0, 0, 40)
-keyBox.Position = UDim2.new(0.5, 0, 0.68, 0)
-keyBox.Parent = frame
+keyBox.Position = UDim2.new(0.5, 0, 0.58, 0)
+keyBox.Parent = content
 
 -- Clipboard copy
 getKeyBtn.MouseButton1Click:Connect(function()
-	local link = "https://sites.google.com/view/whagjen/home" -- <- replace with your real link
+	local link = "https://sites.google.com/view/whagjen/home"
 	local success = pcall(function()
 		setclipboard(link)
 	end)
@@ -100,7 +130,7 @@ getKeyBtn.MouseButton1Click:Connect(function()
 end)
 
 -- Key check
-local correctKey = "Free_682" -- <- change to your own key
+local correctKey = "Free_682"
 
 keyBox.FocusLost:Connect(function(enterPressed)
 	if enterPressed then
@@ -132,4 +162,11 @@ executeBtn.MouseButton1Click:Connect(function()
 			log.Text = "Error: " .. tostring(err)
 		end
 	end
+end)
+
+-- Minimize toggle
+local minimized = false
+minimizeBtn.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	content.Visible = not minimized
 end)
